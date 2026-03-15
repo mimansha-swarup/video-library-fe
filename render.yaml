@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: video-stream-backend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: B2_KEY_ID
+        sync: false
+      - key: B2_APPLICATION_KEY
+        sync: false
+      - key: B2_BUCKET_NAME
+        sync: false
+      - key: B2_BUCKET_ID
+        sync: false
+      - key: B2_ENDPOINT
+        sync: false
+      - key: SIGNED_URL_EXPIRY_SECONDS
+        value: 3600
