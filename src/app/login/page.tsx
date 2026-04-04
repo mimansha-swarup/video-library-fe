@@ -4,16 +4,19 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import Logo from "@/components/ui/Logo";
+import BackgroundDecor from "@/components/ui/BackgroundDecor";
 
 export default function LoginPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, approved } = useAuth();
   const router = useRouter();
   const [signing, setSigning] = useState(false);
   const [error,   setError]   = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && user) router.replace("/");
-  }, [user, loading, router]);
+    if (!loading && user) {
+      router.replace(approved ? "/" : "/pending");
+    }
+  }, [user, loading, approved, router]);
 
   async function handleGoogle() {
     setSigning(true);
@@ -23,8 +26,9 @@ export default function LoginPage() {
         import("@/lib/firebase"),
         import("firebase/auth"),
       ]);
-      await signInWithPopup(getFirebaseAuth(), getGoogleProvider());
-      router.replace("/");
+      const { user: signedInUser } = await signInWithPopup(getFirebaseAuth(), getGoogleProvider());
+      const tokenResult = await signedInUser.getIdTokenResult(true);
+      router.replace(tokenResult.claims.approved ? "/" : "/pending");
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Sign-in failed. Please try again.";
       setError(msg);
@@ -37,10 +41,7 @@ export default function LoginPage() {
 
       {/* ── Left panel — branding ───────────────────────────── */}
       <div className="hidden lg:flex flex-col justify-between w-[52%] border-r border-gold p-12 relative overflow-hidden">
-        {/* Grid lines */}
-        <div className="absolute inset-0 bg-hero-lines opacity-60 pointer-events-none" />
-        {/* Gold radial bloom */}
-        <div className="absolute inset-0 bg-radial-gold pointer-events-none" />
+        <BackgroundDecor linesOpacity="opacity-60" />
         {/* Decorative reel watermark */}
         <div className="absolute -bottom-24 -left-24 opacity-[0.04] pointer-events-none">
           <svg width="480" height="480" viewBox="0 0 480 480" fill="none">

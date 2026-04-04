@@ -5,14 +5,17 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading, approved } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (loading) return;
+    if (!user) {
       router.replace("/login");
+    } else if (!approved) {
+      router.replace("/pending");
     }
-  }, [user, loading]);
+  }, [user, loading, approved]);
 
   if (loading) {
     return (
@@ -43,7 +46,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!user) return null;
+  if (!user || !approved) return null;
 
   return <>{children}</>;
 }
