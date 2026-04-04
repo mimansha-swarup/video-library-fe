@@ -19,6 +19,8 @@ export interface Lesson {
   videoKey: string;
   duration: number;
   order: number;
+  transcript?: string;
+  aiNotes?: string;
 }
 
 export interface ModuleWithLessons extends Module {

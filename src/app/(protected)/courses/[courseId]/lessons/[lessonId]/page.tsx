@@ -11,6 +11,7 @@ import VideoArea from "@/components/lesson/VideoArea";
 import LessonInfoBar from "@/components/lesson/LessonInfoBar";
 import LessonNavBar from "@/components/lesson/LessonNavBar";
 import LessonNotes from "@/components/lesson/LessonNotes";
+import LessonExtras from "@/components/lesson/LessonExtras";
 import { LessonSkeleton, LessonError } from "@/components/ui/LessonShells";
 
 export default function LessonPage() {
@@ -78,6 +79,7 @@ export default function LessonPage() {
             lastWatchedSecond={lastWatchedSecond}
           />
           <LessonNavBar courseId={courseId} allLessons={allLessons} lessonId={lessonId} prevLesson={prevLesson} nextLesson={nextLesson} />
+          <LessonExtras lesson={lesson} />
           <LessonNotes lessonId={lessonId} />
         </div>
         <div className="hidden lg:flex w-[300px] xl:w-[340px] border-l border-gold shrink-0 overflow-y-auto">
