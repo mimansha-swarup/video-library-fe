@@ -10,6 +10,7 @@ import ModuleSidebar from "@/components/course/ModuleSidebar";
 import VideoArea from "@/components/lesson/VideoArea";
 import LessonInfoBar from "@/components/lesson/LessonInfoBar";
 import LessonNavBar from "@/components/lesson/LessonNavBar";
+import LessonNotes from "@/components/lesson/LessonNotes";
 import { LessonSkeleton, LessonError } from "@/components/ui/LessonShells";
 
 export default function LessonPage() {
@@ -66,8 +67,18 @@ export default function LessonPage() {
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 overflow-y-auto">
           <VideoArea streamUrl={streamUrl} lessonId={lessonId} lastWatchedSecond={lastWatchedSecond} />
-          <LessonInfoBar courseId={courseId} course={course} lesson={lesson} parentModule={parentModule} idx={idx} total={allLessons.length} />
+          <LessonInfoBar
+            courseId={courseId}
+            course={course}
+            lesson={lesson}
+            parentModule={parentModule}
+            idx={idx}
+            total={allLessons.length}
+            completed={progressByLessonId[lessonId]?.completed ?? false}
+            lastWatchedSecond={lastWatchedSecond}
+          />
           <LessonNavBar courseId={courseId} allLessons={allLessons} lessonId={lessonId} prevLesson={prevLesson} nextLesson={nextLesson} />
+          <LessonNotes lessonId={lessonId} />
         </div>
         <div className="hidden lg:flex w-[300px] xl:w-[340px] border-l border-gold shrink-0 overflow-y-auto">
           <ModuleSidebar courseId={courseId} modules={course.modules} activeLessonId={lessonId} progress={progressByLessonId} />

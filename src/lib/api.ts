@@ -1,4 +1,4 @@
-import type { Course, CourseWithModules, CourseProgressSummary, Lesson, ModuleWithLessons, StreamResponse, UserProgress } from "./types";
+import type { Course, CourseWithModules, CourseProgressSummary, Lesson, LessonNote, ModuleWithLessons, StreamResponse, UserProgress } from "./types";
 
 export const QUERY_KEYS = {
   courses: ["courses"] as const,
@@ -7,6 +7,7 @@ export const QUERY_KEYS = {
   stream: (id: string) => ["stream", id] as const,
   progress: ["progress"] as const,
   progressSummary: ["progressSummary"] as const,
+  note: (lessonId: string) => ["note", lessonId] as const,
 } as const;
 
 const BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? "https://video-library-be.onrender.com") + "/api";
@@ -83,6 +84,17 @@ export async function getProgress(): Promise<UserProgress[]> {
 
 export async function getProgressSummary(): Promise<CourseProgressSummary[]> {
   return apiFetch<CourseProgressSummary[]>("/progress/summary");
+}
+
+export async function getNote(lessonId: string): Promise<LessonNote | null> {
+  return apiFetch<LessonNote | null>(`/notes/${lessonId}`);
+}
+
+export async function saveNote(lessonId: string, content: string): Promise<LessonNote> {
+  return apiFetch<LessonNote>(`/notes/${lessonId}`, {
+    method: "PUT",
+    body: JSON.stringify({ content }),
+  });
 }
 
 export async function updateProgress(

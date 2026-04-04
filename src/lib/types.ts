@@ -37,6 +37,14 @@ export interface UserProgress {
   completed: boolean;
 }
 
+export interface LessonNote {
+  id: string;
+  userId: string;
+  lessonId: string;
+  content: string;
+  updatedAt: string;
+}
+
 export interface StreamResponse {
   streamUrl: string;
 }
