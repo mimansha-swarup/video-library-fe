@@ -1,37 +1,27 @@
 {
-  "name": "video-stream-be",
-  "version": "1.0.0",
-  "description": "Private video streaming learning platform backend",
-  "main": "dist/index.js",
+  "name": "video-library-fe",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "seed": "ts-node src/scripts/seed.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1006.0",
-    "@aws-sdk/s3-request-presigner": "^3.1006.0",
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "firebase-admin": "^13.7.0",
-    "morgan": "^1.10.1",
-    "multer": "^2.1.1"
+    "@tanstack/react-query": "^5.96.2",
+    "firebase": "^12.11.0",
+    "next": "^14.2.29",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/morgan": "^1.9.10",
-    "@types/multer": "^2.1.0",
-    "@types/node": "^25.4.0",
-    "nodemon": "^3.1.14",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "@types/node": "^20.17.57",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.4",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3"
   }
 }

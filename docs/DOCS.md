@@ -239,10 +239,4 @@ Create the following composite indexes in Firebase Console:
 
 ## Future Enhancements
 
-- [ ] Progress tracking with continue watching
-- [ ] AI-powered video summaries
-- [ ] Playlist support
-- [ ] Adaptive streaming (HLS/DASH)
-- [ ] Video transcoding pipeline
-- [ ] Search functionality
-- [ ] Admin dashboard
+See [ROADMAP.md](./ROADMAP.md) for the full frontend feature roadmap with prioritisation.
