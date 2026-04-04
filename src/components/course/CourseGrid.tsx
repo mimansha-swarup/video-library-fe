@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import CourseCard from "@/components/course/CourseCard";
-import type { Course } from "@/lib/types";
+import type { Course, CourseProgressSummary } from "@/lib/types";
 
 const PlayCircleIcon = dynamic(() => import("@/assets/icons/PlayCircleIcon"), { loading: () => null });
 
@@ -8,9 +8,10 @@ interface Props {
   courses: Course[];
   isLoading: boolean;
   isError: boolean;
+  progressSummaries?: CourseProgressSummary[];
 }
 
-export default function CourseGrid({ courses, isLoading, isError }: Props) {
+export default function CourseGrid({ courses, isLoading, isError, progressSummaries = [] }: Props) {
   if (isError) {
     return (
       <div className="flex items-start gap-3 rounded-sm border border-gold bg-bg-2 px-5 py-4 mb-8 anim-fade-in">
@@ -57,7 +58,12 @@ export default function CourseGrid({ courses, isLoading, isError }: Props) {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 stagger">
         {courses.map((course, i) => (
-          <CourseCard key={course.id} course={course} index={i} />
+          <CourseCard
+            key={course.id}
+            course={course}
+            index={i}
+            progress={progressSummaries.find((p) => p.courseId === course.id)}
+          />
         ))}
       </div>
     </>

@@ -3,19 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import type { ModuleWithLessons } from "@/lib/types";
+import type { ModuleWithLessons, UserProgress } from "@/lib/types";
 import { formatDuration, padIndex } from "@/lib/utils";
 
 const ChevronDownIcon = dynamic(() => import("@/assets/icons/ChevronDownIcon"), { loading: () => null });
 const PlayIcon        = dynamic(() => import("@/assets/icons/PlayIcon"),        { loading: () => null });
+const CheckCircleIcon = dynamic(() => import("@/assets/icons/CheckCircleIcon"), { loading: () => null });
 
 interface Props {
   courseId: string;
   modules: ModuleWithLessons[];
   activeLessonId?: string;
+  progress?: Record<string, UserProgress>;
 }
 
-export default function ModuleSidebar({ courseId, modules, activeLessonId }: Props) {
+export default function ModuleSidebar({ courseId, modules, activeLessonId, progress = {} }: Props) {
   const [openModules, setOpenModules] = useState<Record<string, boolean>>(
     Object.fromEntries(modules.map((m) => [m.id, true]))
   );
@@ -59,7 +61,8 @@ export default function ModuleSidebar({ courseId, modules, activeLessonId }: Pro
             {openModules[mod.id] && (
               <ul className="py-1">
                 {mod.lessons.map((lesson, lesIdx) => {
-                  const isActive = lesson.id === activeLessonId;
+                  const isActive    = lesson.id === activeLessonId;
+                  const isCompleted = !!progress[lesson.id]?.completed;
                   return (
                     <li key={lesson.id}>
                       <Link
@@ -74,8 +77,11 @@ export default function ModuleSidebar({ courseId, modules, activeLessonId }: Pro
                           <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-5 bg-gold rounded-r-full" />
                         )}
 
-                        <span className={`font-mono text-[10px] shrink-0 w-4 text-right ${isActive ? "text-gold" : "text-muted-2"}`}>
-                          {padIndex(lesIdx + 1)}
+                        <span className={`font-mono text-[10px] shrink-0 w-4 flex items-center justify-end ${isActive ? "text-gold" : "text-muted-2"}`}>
+                          {isCompleted
+                            ? <CheckCircleIcon size={10} />
+                            : padIndex(lesIdx + 1)
+                          }
                         </span>
 
                         <span className="flex-1 leading-snug line-clamp-2">

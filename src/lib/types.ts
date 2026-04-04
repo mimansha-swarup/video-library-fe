@@ -40,3 +40,11 @@ export interface UserProgress {
 export interface StreamResponse {
   streamUrl: string;
 }
+
+export interface CourseProgressSummary {
+  courseId: string;
+  completedLessons: number;
+  totalLessons: number;
+  lastWatchedLessonId: string | null;
+  lastWatchedSecond: number;
+}

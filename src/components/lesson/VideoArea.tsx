@@ -6,13 +6,14 @@ const PlayCircleIcon = dynamic(() => import("@/assets/icons/PlayCircleIcon"), { 
 interface Props {
   streamUrl: string;
   lessonId: string;
+  lastWatchedSecond?: number;
 }
 
-export default function VideoArea({ streamUrl, lessonId }: Props) {
+export default function VideoArea({ streamUrl, lessonId, lastWatchedSecond }: Props) {
   return (
     <div className="bg-black border-b border-gold">
       {streamUrl ? (
-        <VideoPlayer streamUrl={streamUrl} lessonId={lessonId} />
+        <VideoPlayer streamUrl={streamUrl} lessonId={lessonId} lastWatchedSecond={lastWatchedSecond} />
       ) : (
         <div className="aspect-video flex flex-col items-center justify-center bg-bg-2 gap-4">
           <PlayCircleIcon size={48} className="opacity-20" />

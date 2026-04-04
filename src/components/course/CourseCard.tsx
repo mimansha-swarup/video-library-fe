@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import type { Course } from "@/lib/types";
+import type { Course, CourseProgressSummary } from "@/lib/types";
 
 const PlayCircleIcon = dynamic(() => import("@/assets/icons/PlayCircleIcon"), { loading: () => null });
 const PlayIcon       = dynamic(() => import("@/assets/icons/PlayIcon"),       { loading: () => null });
@@ -10,12 +10,22 @@ const ArrowRightIcon = dynamic(() => import("@/assets/icons/ArrowRightIcon"), { 
 interface Props {
   course: Course;
   index?: number;
+  progress?: CourseProgressSummary;
 }
 
-export default function CourseCard({ course, index = 0 }: Props) {
+export default function CourseCard({ course, index = 0, progress }: Props) {
+  const hasProgress = !!(progress && (progress.completedLessons > 0 || progress.lastWatchedSecond > 0));
+  const progressPct = progress && progress.totalLessons > 0
+    ? Math.round((progress.completedLessons / progress.totalLessons) * 100)
+    : 0;
+
+  const href = hasProgress && progress?.lastWatchedLessonId
+    ? `/courses/${course.id}/lessons/${progress.lastWatchedLessonId}`
+    : `/courses/${course.id}`;
+
   return (
     <Link
-      href={`/courses/${course.id}`}
+      href={href}
       className="course-card group relative flex flex-col bg-bg-2 border border-gold rounded-sm overflow-hidden anim-fade-up shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-0.5"
       style={{ animationDelay: `${index * 70}ms` }}
     >
@@ -52,6 +62,16 @@ export default function CourseCard({ course, index = 0 }: Props) {
         </div>
 
         <div className="absolute top-0 right-0 border-t-[20px] border-r-[20px] border-t-transparent border-r-gold-dim opacity-60" />
+
+        {/* Progress bar */}
+        {hasProgress && (
+          <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-bg-3/80">
+            <div
+              className="h-full bg-gold transition-all duration-300"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col flex-1 p-4 gap-2.5">
@@ -69,10 +89,15 @@ export default function CourseCard({ course, index = 0 }: Props) {
         )}
 
         <div className="flex items-center gap-2 pt-2 mt-auto border-t border-gold">
-          <span className="font-mono text-[10px] tracking-widest text-gold-dim uppercase">
-            Watch
+          <span className={`font-mono text-[10px] tracking-widest uppercase ${hasProgress ? "text-gold" : "text-gold-dim"}`}>
+            {hasProgress ? "Resume" : "Watch"}
           </span>
-          <ArrowRightIcon className="text-gold-dim" />
+          {hasProgress && progress && (
+            <span className="font-mono text-[10px] text-muted-2 ml-1">
+              {progress.completedLessons}/{progress.totalLessons}
+            </span>
+          )}
+          <ArrowRightIcon className={`ml-auto ${hasProgress ? "text-gold" : "text-gold-dim"}`} />
         </div>
       </div>
     </Link>

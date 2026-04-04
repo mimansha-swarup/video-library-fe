@@ -1,13 +1,17 @@
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import type { ModuleWithLessons } from "@/lib/types";
+import type { ModuleWithLessons, UserProgress } from "@/lib/types";
 import { padIndex } from "@/lib/utils";
+
+const CheckCircleIcon = dynamic(() => import("@/assets/icons/CheckCircleIcon"), { loading: () => null });
 
 interface Props {
   courseId: string;
   modules: ModuleWithLessons[];
+  progress?: Record<string, UserProgress>;
 }
 
-export default function MobileModuleList({ courseId, modules }: Props) {
+export default function MobileModuleList({ courseId, modules, progress = {} }: Props) {
   return (
     <div className="lg:hidden px-6 py-8">
       {modules.map((mod, mi) => (
@@ -17,17 +21,22 @@ export default function MobileModuleList({ courseId, modules }: Props) {
             <h3 className="text-[13px] font-semibold text-cream-DEFAULT">{mod.title}</h3>
           </div>
           <ul className="divide-y divide-gold">
-            {mod.lessons.map((lesson, li) => (
-              <li key={lesson.id}>
-                <Link
-                  href={`/courses/${courseId}/lessons/${lesson.id}`}
-                  className="flex items-center gap-3 px-4 py-2.5 text-[12px] text-muted hover:text-cream-DEFAULT hover:bg-bg-3 transition-colors"
-                >
-                  <span className="font-mono text-[10px] text-muted-2 w-4">{li + 1}</span>
-                  <span className="flex-1 line-clamp-1">{lesson.title}</span>
-                </Link>
-              </li>
-            ))}
+            {mod.lessons.map((lesson, li) => {
+              const isCompleted = !!progress[lesson.id]?.completed;
+              return (
+                <li key={lesson.id}>
+                  <Link
+                    href={`/courses/${courseId}/lessons/${lesson.id}`}
+                    className="flex items-center gap-3 px-4 py-2.5 text-[12px] text-muted hover:text-cream-DEFAULT hover:bg-bg-3 transition-colors"
+                  >
+                    <span className="font-mono text-[10px] text-muted-2 w-4 flex items-center justify-end shrink-0">
+                      {isCompleted ? <CheckCircleIcon size={10} /> : li + 1}
+                    </span>
+                    <span className="flex-1 line-clamp-1">{lesson.title}</span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       ))}
