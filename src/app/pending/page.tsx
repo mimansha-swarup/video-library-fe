@@ -2,14 +2,21 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import Logo from "@/components/ui/Logo";
 import BackgroundDecor from "@/components/ui/BackgroundDecor";
+import Footer from "@/components/layout/Footer";
+
+const PendingIcon     = dynamic(() => import("@/assets/icons/PendingIcon"),     { loading: () => null });
+const RefreshIcon     = dynamic(() => import("@/assets/icons/RefreshIcon"),     { loading: () => null });
+const ButtonSpinner   = dynamic(() => import("@/assets/icons/ButtonSpinner"),   { loading: () => null });
+const SignOutIcon     = dynamic(() => import("@/assets/icons/SignOutIcon"),     { loading: () => null });
 
 export default function PendingPage() {
   const router = useRouter();
-  const [signing, setSigning]     = useState(false);
+  const [signing, setSigning]       = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [denied, setDenied]       = useState(false);
+  const [denied, setDenied]         = useState(false);
 
   async function handleRefresh() {
     setRefreshing(true);
@@ -43,8 +50,7 @@ export default function PendingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg flex flex-col items-center justify-center px-6">
-      {/* Grid lines + gold bloom (mirrors login page) */}
+    <div className="min-h-screen bg-bg flex flex-col items-center justify-center px-6 relative">
       <BackgroundDecor position="fixed" linesOpacity="opacity-40" />
 
       <div className="relative flex flex-col items-center text-center max-w-sm w-full">
@@ -56,16 +62,7 @@ export default function PendingPage() {
 
         {/* Icon */}
         <div className="mb-8 anim-fade-up">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="mx-auto">
-            <circle cx="24" cy="24" r="23" stroke="#D4A84B" strokeWidth="1" opacity="0.3" />
-            <circle cx="24" cy="24" r="14" stroke="#D4A84B" strokeWidth="1" opacity="0.5" />
-            <path
-              d="M24 16v9M24 29v2"
-              stroke="#D4A84B"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+          <PendingIcon size={48} className="mx-auto" />
         </div>
 
         {/* Copy */}
@@ -94,16 +91,10 @@ export default function PendingPage() {
           className="anim-fade-up w-full flex items-center justify-center gap-2 bg-gold/10 border border-gold-md hover:border-gold-hi hover:bg-gold/20 rounded-sm px-5 py-3.5 text-[13px] font-semibold text-gold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-card mb-3"
           style={{ animationDelay: "140ms" }}
         >
-          <svg
-            width="14" height="14" viewBox="0 0 14 14" fill="none"
-            className={refreshing ? "animate-spin" : ""}
-          >
-            <path
-              d="M12.5 7A5.5 5.5 0 1 1 9.4 2.1"
-              stroke="#D4A84B" strokeWidth="1.2" strokeLinecap="round" fill="none"
-            />
-            <path d="M9 1v3.5H12.5" stroke="#D4A84B" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          {refreshing
+            ? <ButtonSpinner size={14} />
+            : <RefreshIcon size={14} />
+          }
           {refreshing ? "Checking…" : "Check approval status"}
         </button>
 
@@ -120,19 +111,13 @@ export default function PendingPage() {
           className="anim-fade-up w-full flex items-center justify-center gap-2 bg-bg-2 border border-gold-md hover:border-gold-hi hover:bg-bg-3 rounded-sm px-5 py-3.5 text-[13px] font-semibold text-cream-DEFAULT transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-card"
           style={{ animationDelay: "140ms" }}
         >
-          {signing ? (
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="animate-spin">
-              <circle cx="7" cy="7" r="5.5" stroke="#D4A84B" strokeWidth="1" opacity="0.2" />
-              <circle cx="7" cy="7" r="5.5" stroke="#D4A84B" strokeWidth="1" strokeDasharray="10 18" strokeLinecap="round" />
-            </svg>
-          ) : (
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 7h7M9 5l2 2-2 2" stroke="#D4A84B" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M7 2H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4" stroke="#D4A84B" strokeWidth="1.2" strokeLinecap="round" />
-            </svg>
-          )}
+          {signing ? <ButtonSpinner size={14} /> : <SignOutIcon size={14} />}
           {signing ? "Signing out…" : "Sign out"}
         </button>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0">
+        <Footer />
       </div>
     </div>
   );

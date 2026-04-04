@@ -2,8 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import type { ModuleWithLessons } from "@/lib/types";
 import { formatDuration, padIndex } from "@/lib/utils";
+
+const ChevronDownIcon = dynamic(() => import("@/assets/icons/ChevronDownIcon"), { loading: () => null });
+const PlayIcon        = dynamic(() => import("@/assets/icons/PlayIcon"),        { loading: () => null });
 
 interface Props {
   courseId: string;
@@ -46,15 +50,10 @@ export default function ModuleSidebar({ courseId, modules, activeLessonId }: Pro
               <span className="text-[12px] font-semibold text-cream-dim group-hover/mod:text-cream-DEFAULT transition-colors leading-snug flex-1">
                 {mod.title}
               </span>
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 12 12"
-                fill="none"
+              <ChevronDownIcon
+                size={12}
                 className={`shrink-0 text-muted transition-transform duration-200 ${openModules[mod.id] ? "rotate-180" : ""}`}
-              >
-                <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              />
             </button>
 
             {openModules[mod.id] && (
@@ -91,9 +90,7 @@ export default function ModuleSidebar({ courseId, modules, activeLessonId }: Pro
 
                         {isActive && (
                           <span className="shrink-0">
-                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                              <path d="M3 2L8 5L3 8V2Z" fill="#D4A84B"/>
-                            </svg>
+                            <PlayIcon size={10} />
                           </span>
                         )}
                       </Link>

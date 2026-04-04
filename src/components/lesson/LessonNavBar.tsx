@@ -1,5 +1,10 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import type { Lesson } from "@/lib/types";
+
+const ArrowLeftIcon   = dynamic(() => import("@/assets/icons/ArrowLeftIcon"),   { loading: () => null });
+const ArrowRightIcon  = dynamic(() => import("@/assets/icons/ArrowRightIcon"),  { loading: () => null });
+const CheckCircleIcon = dynamic(() => import("@/assets/icons/CheckCircleIcon"), { loading: () => null });
 
 interface Props {
   courseId: string;
@@ -15,9 +20,7 @@ export default function LessonNavBar({ courseId, allLessons, lessonId, prevLesso
       {prevLesson ? (
         <Link href={`/courses/${courseId}/lessons/${prevLesson.id}`} className="group flex items-center gap-3 text-[12px] text-muted hover:text-cream-DEFAULT transition-colors">
           <div className="w-8 h-8 rounded-sm border border-gold flex items-center justify-center group-hover:bg-bg-3 transition-colors shrink-0">
-            <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-              <path d="M12 4H2M5 1L2 4L5 7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <ArrowLeftIcon />
           </div>
           <div className="text-left hidden sm:block">
             <p className="font-mono text-[9px] tracking-widest text-muted-2 uppercase">Previous</p>
@@ -44,17 +47,12 @@ export default function LessonNavBar({ courseId, allLessons, lessonId, prevLesso
             <p className="line-clamp-1 text-[12px] group-hover:text-gold transition-colors">{nextLesson.title}</p>
           </div>
           <div className="w-8 h-8 rounded-sm border border-gold flex items-center justify-center group-hover:bg-bg-3 transition-colors shrink-0">
-            <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-              <path d="M0 4H10M7 1L10 4L7 7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <ArrowRightIcon />
           </div>
         </Link>
       ) : (
         <div className="flex items-center gap-2 text-[12px] text-gold">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <circle cx="7" cy="7" r="6" stroke="#D4A84B" strokeWidth="1"/>
-            <path d="M4.5 7L6.5 9L9.5 5" stroke="#D4A84B" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <CheckCircleIcon size={14} />
           <span className="font-mono text-[10px] tracking-widest uppercase">Course complete</span>
         </div>
       )}

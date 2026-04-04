@@ -1,5 +1,8 @@
+import dynamic from "next/dynamic";
 import CourseCard from "@/components/course/CourseCard";
 import type { Course } from "@/lib/types";
+
+const PlayCircleIcon = dynamic(() => import("@/assets/icons/PlayCircleIcon"), { loading: () => null });
 
 interface Props {
   courses: Course[];
@@ -37,10 +40,7 @@ export default function CourseGrid({ courses, isLoading, isError }: Props) {
   if (courses.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-32 text-center">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="opacity-20 mb-5">
-          <circle cx="24" cy="24" r="23" stroke="#D4A84B" strokeWidth="1.2"/>
-          <path d="M18 16L32 24L18 32V16Z" fill="#D4A84B"/>
-        </svg>
+        <PlayCircleIcon size={48} className="opacity-20 mb-5" />
         <p className="font-display text-[20px] text-muted">No courses found</p>
         <p className="text-[12px] text-muted-2 mt-2 font-mono">Add courses through the backend API</p>
       </div>

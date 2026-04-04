@@ -1,6 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import type { CourseWithModules } from "@/lib/types";
+
+const ArrowLeftIcon  = dynamic(() => import("@/assets/icons/ArrowLeftIcon"),  { loading: () => null });
+const ModuleDocIcon  = dynamic(() => import("@/assets/icons/ModuleDocIcon"),  { loading: () => null });
+const PlayIcon       = dynamic(() => import("@/assets/icons/PlayIcon"),       { loading: () => null });
 
 interface Props {
   course: CourseWithModules;
@@ -23,9 +28,7 @@ export default function CourseHero({ course, courseId, totalLessons }: Props) {
 
       <div className="relative max-w-3xl px-8 lg:px-14 py-12">
         <Link href="/" className="inline-flex items-center gap-2 font-mono text-[10px] tracking-widest text-muted uppercase hover:text-gold transition-colors mb-8">
-          <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-            <path d="M12 4H2M5 1L2 4L5 7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <ArrowLeftIcon />
           Back to Library
         </Link>
 
@@ -42,16 +45,11 @@ export default function CourseHero({ course, courseId, totalLessons }: Props) {
 
         <div className="flex flex-wrap items-center gap-3 mb-8 anim-fade-up" style={{ animationDelay: "120ms" }}>
           <span className="inline-flex items-center gap-1.5 border border-gold rounded-sm px-3 py-1 font-mono text-[10px] tracking-widest text-gold uppercase">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-              <rect x="1" y="1" width="8" height="8" rx="1" stroke="#D4A84B" strokeWidth="1"/>
-              <path d="M3 4H7M3 6H5" stroke="#D4A84B" strokeWidth="0.8" strokeLinecap="round"/>
-            </svg>
+            <ModuleDocIcon size={10} />
             {course.modules.length} Modules
           </span>
           <span className="inline-flex items-center gap-1.5 border border-gold rounded-sm px-3 py-1 font-mono text-[10px] tracking-widest text-gold uppercase">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-              <path d="M2 2L8 5L2 8V2Z" fill="#D4A84B"/>
-            </svg>
+            <PlayIcon size={10} />
             {totalLessons} Lessons
           </span>
         </div>
@@ -62,9 +60,7 @@ export default function CourseHero({ course, courseId, totalLessons }: Props) {
             className="inline-flex items-center gap-3 bg-gold text-bg font-semibold text-[13px] px-6 py-3 rounded-sm hover:bg-gold-bright transition-colors shadow-gold-glow group anim-fade-up"
             style={{ animationDelay: "160ms" }}
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="group-hover:translate-x-0.5 transition-transform">
-              <path d="M3 2L11 7L3 12V2Z" fill="currentColor"/>
-            </svg>
+            <PlayIcon size={14} fill="currentColor" className="group-hover:translate-x-0.5 transition-transform" />
             Start Course
           </Link>
         )}

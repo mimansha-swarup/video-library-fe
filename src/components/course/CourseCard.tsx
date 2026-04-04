@@ -1,6 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import type { Course } from "@/lib/types";
+
+const PlayCircleIcon = dynamic(() => import("@/assets/icons/PlayCircleIcon"), { loading: () => null });
+const PlayIcon       = dynamic(() => import("@/assets/icons/PlayIcon"),       { loading: () => null });
+const ArrowRightIcon = dynamic(() => import("@/assets/icons/ArrowRightIcon"), { loading: () => null });
 
 interface Props {
   course: Course;
@@ -34,10 +39,7 @@ export default function CourseCard({ course, index = 0 }: Props) {
                 backgroundSize: "24px 24px",
               }}
             />
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" className="opacity-40">
-              <circle cx="20" cy="20" r="19" stroke="#D4A84B" strokeWidth="1"/>
-              <path d="M15 12L30 20L15 28V12Z" fill="#D4A84B" opacity="0.8"/>
-            </svg>
+            <PlayCircleIcon size={40} className="opacity-40" />
           </div>
         )}
 
@@ -45,9 +47,7 @@ export default function CourseCard({ course, index = 0 }: Props) {
 
         <div className="card-play absolute inset-0 flex items-center justify-center">
           <div className="w-11 h-11 rounded-full border border-gold-hi bg-bg/70 backdrop-blur-sm flex items-center justify-center shadow-gold-sm">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M4 2.5L11.5 7L4 11.5V2.5Z" fill="#D4A84B"/>
-            </svg>
+            <PlayIcon size={14} />
           </div>
         </div>
 
@@ -72,9 +72,7 @@ export default function CourseCard({ course, index = 0 }: Props) {
           <span className="font-mono text-[10px] tracking-widest text-gold-dim uppercase">
             Watch
           </span>
-          <svg width="12" height="8" viewBox="0 0 12 8" fill="none" className="text-gold-dim">
-            <path d="M0 4H10M7 1L10 4L7 7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <ArrowRightIcon className="text-gold-dim" />
         </div>
       </div>
     </Link>
