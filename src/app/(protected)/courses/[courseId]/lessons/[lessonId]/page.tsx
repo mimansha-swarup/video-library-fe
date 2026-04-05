@@ -12,6 +12,7 @@ import LessonInfoBar from "@/components/lesson/LessonInfoBar";
 import LessonNavBar from "@/components/lesson/LessonNavBar";
 import LessonNotes from "@/components/lesson/LessonNotes";
 import LessonExtras from "@/components/lesson/LessonExtras";
+import MobileSidebarDrawer from "@/components/lesson/MobileSidebarDrawer";
 import { LessonSkeleton, LessonError } from "@/components/ui/LessonShells";
 
 export default function LessonPage() {
@@ -63,10 +64,10 @@ export default function LessonPage() {
   const lastWatchedSecond = progressByLessonId[lessonId]?.lastWatchedSecond ?? 0;
 
   return (
-    <div className="min-h-screen bg-bg flex flex-col">
+    <div className="h-screen bg-bg flex flex-col">
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto pb-12 lg:pb-0">
           <VideoArea streamUrl={streamUrl} lessonId={lessonId} lastWatchedSecond={lastWatchedSecond} />
           <LessonInfoBar
             courseId={courseId}
@@ -85,6 +86,12 @@ export default function LessonPage() {
         <div className="hidden lg:flex w-[300px] xl:w-[340px] border-l border-gold shrink-0 overflow-y-auto">
           <ModuleSidebar courseId={courseId} modules={course.modules} activeLessonId={lessonId} progress={progressByLessonId} />
         </div>
+        <MobileSidebarDrawer
+          courseId={courseId}
+          modules={course.modules}
+          activeLessonId={lessonId}
+          progress={progressByLessonId}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import type { ModuleWithLessons, UserProgress } from "@/lib/types";
@@ -15,12 +15,28 @@ interface Props {
   modules: ModuleWithLessons[];
   activeLessonId?: string;
   progress?: Record<string, UserProgress>;
+  hideHeader?: boolean;
 }
 
-export default function ModuleSidebar({ courseId, modules, activeLessonId, progress = {} }: Props) {
+export default function ModuleSidebar({ courseId, modules, activeLessonId, progress = {}, hideHeader = false }: Props) {
   const [openModules, setOpenModules] = useState<Record<string, boolean>>(
     Object.fromEntries(modules.map((m) => [m.id, true]))
   );
+  const activeRef = useRef<HTMLLIElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const el       = activeRef.current;
+      const scroller = scrollRef.current;
+      if (!el || !scroller) return;
+      const elRect       = el.getBoundingClientRect();
+      const scrollerRect = scroller.getBoundingClientRect();
+      scroller.scrollTop =
+        scroller.scrollTop + elRect.top - scrollerRect.top - scroller.clientHeight / 2 + el.clientHeight / 2;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [activeLessonId]);
 
   function toggle(id: string) {
     setOpenModules((p) => ({ ...p, [id]: !p[id] }));
@@ -30,16 +46,18 @@ export default function ModuleSidebar({ courseId, modules, activeLessonId, progr
 
   return (
     <aside className="flex flex-col h-full bg-bg-2 overflow-hidden">
-      <div className="px-5 py-4 border-b border-gold shrink-0">
-        <p className="font-mono text-[10px] tracking-[0.18em] text-gold uppercase">
-          Course Content
-        </p>
-        <p className="mt-1 text-[11px] text-muted">
-          {modules.length} modules &middot; {totalLessons} lessons
-        </p>
-      </div>
+      {!hideHeader && (
+        <div className="px-5 py-4 border-b border-gold shrink-0">
+          <p className="font-mono text-[10px] tracking-[0.18em] text-gold uppercase">
+            Course Content
+          </p>
+          <p className="mt-1 text-[11px] text-muted">
+            {modules.length} modules &middot; {totalLessons} lessons
+          </p>
+        </div>
+      )}
 
-      <div className="flex-1 overflow-y-auto">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto">
         {modules.map((mod, modIdx) => (
           <div key={mod.id} className="border-b border-gold">
             <button
@@ -64,7 +82,7 @@ export default function ModuleSidebar({ courseId, modules, activeLessonId, progr
                   const isActive    = lesson.id === activeLessonId;
                   const isCompleted = !!progress[lesson.id]?.completed;
                   return (
-                    <li key={lesson.id}>
+                    <li key={lesson.id} ref={isActive ? activeRef : null}>
                       <Link
                         href={`/courses/${courseId}/lessons/${lesson.id}`}
                         className={`relative flex items-center gap-3 pl-10 pr-5 py-2.5 text-[12px] transition-all duration-150 ${
